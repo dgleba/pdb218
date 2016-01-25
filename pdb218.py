@@ -124,7 +124,7 @@ def index():
 
 admin = flask_admin.Admin(
     app,
-    'Prodigy in Flask (pdb218)',
+    'Prodigy (Flask, pdb218)',
     base_template='my_master.html',
     template_mode='bootstrap3',
 )
