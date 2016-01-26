@@ -131,12 +131,17 @@ admin = flask_admin.Admin(
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# customize cilisting 
+# customize trackberry
 
 
 class dc_prodtrak(MyModelView):
     can_delete = False
     page_size = 30
+    #column_display_pk = Yes
+    # ('timestamp', True) true means decending sort.
+    column_default_sort = ('time', True)
+    can_export = True
+    
     #column_exclude_list = [ 'comments' ]
     
     #column_searchable_list = ['comments', 'owner', \
