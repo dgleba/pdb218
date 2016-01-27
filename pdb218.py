@@ -22,6 +22,9 @@ from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import column_property
 
+import flask_admin as admin
+
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Create Flask application
@@ -131,22 +134,24 @@ admin = flask_admin.Admin(
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# customize trackberry
+# customize trakberry
 
 
 class dc_prodtrak(MyModelView):
+
+    column_display_pk = True
+    
     can_delete = False
     page_size = 30
-    #column_display_pk = Yes
     # ('timestamp', True) true means decending sort.
-    column_default_sort = ('time', True)
+    column_default_sort = ('part_timestamp', True)
     can_export = True
     
     #column_exclude_list = [ 'comments' ]
     
-    #column_searchable_list = ['comments', 'owner', \
+    column_searchable_list = ['machine', 'part_number',  ]
     
-    #column_filters = ['project_number', 'suggestion_status',]
+    column_filters = ['machine', 'cycletime', 'part_number',]
 
 
     
