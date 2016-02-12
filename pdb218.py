@@ -1,28 +1,24 @@
-#
+# prodigy trackberry wee little flasky app..
 # orginally from flask-admin auth example.
 
-# http://v206b2:922/admin/#
-
-
-import os
 from flask import Flask, url_for, redirect, render_template, request, abort
+from flask.ext.admin import Admin
+from flask.ext.admin.contrib.sqla import ModelView
+from flask_admin import helpers as admin_helpers
+from flask_admin.contrib import sqla
+from flask_admin.contrib.sqla import ModelView
+from flask_security.utils import encrypt_password
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import create_engine
+from sqlalchemy.ext.automap import automap_base
+from sqlalchemy.orm import column_property
+import flask_admin
+import flask_admin as admin
+import os
+
 from flask_security import Security, SQLAlchemyUserDatastore, \
     UserMixin, RoleMixin, login_required, current_user
-from flask_security.utils import encrypt_password
-import flask_admin
-from flask_admin.contrib import sqla
-from flask_admin import helpers as admin_helpers
-
-from sqlalchemy.ext.automap import automap_base
-from flask.ext.admin.contrib.sqla import ModelView
-from flask_admin.contrib.sqla import ModelView
-from flask.ext.admin import Admin
-from sqlalchemy import create_engine
-from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.orm import column_property
-
-import flask_admin as admin
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -81,7 +77,6 @@ class User(db.Model, UserMixin):
         return self.email
 
 		
-		
 # Setup Flask-Security
 
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
@@ -90,7 +85,7 @@ security = Security(app, user_datastore)
 
 # Create customized model view class
 
-class MyModelView(sqla.ModelView):
+class SecuredView(sqla.ModelView):
 
     def is_accessible(self):
         if not current_user.is_active or not current_user.is_authenticated:
@@ -126,48 +121,38 @@ def index():
 # Create admin
 
 admin = flask_admin.Admin(
-    app,
-    'Prodigy (Flask, pdb218)',
-    base_template='my_master.html',
-    template_mode='bootstrap3',
-)
+    app,  'Prodigy (Flask, pdb218)',
+    base_template='my_master.html',  template_mode='bootstrap3', )
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # customize trakberry
 
 
-class dc_prodtrak(MyModelView):
+class prodtrack_admview(SecuredView):
 
     column_display_pk = True
-    
     can_delete = False
     page_size = 30
-    # ('timestamp', True) true means decending sort.
+    # sort: ('timestamp', True) true means decending sort.
     column_default_sort = ('part_timestamp', True)
     can_export = True
-    
     #column_exclude_list = [ 'comments' ]
-    
     column_searchable_list = ['machine', 'part_number',  ]
-    
     column_filters = ['machine', 'cycletime', 'part_number',]
-
 
     
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Add model views
 
+admin.add_view(prodtrack_admview(Prodtrak, db.session))
 
-admin.add_view(dc_prodtrak(Prodtrak, db.session))
-
-admin.add_view(MyModelView(Role, db.session))
-admin.add_view(MyModelView(User, db.session))
+admin.add_view(SecuredView(Role, db.session))
+admin.add_view(SecuredView(User, db.session))
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 
 # define a context processor for merging flask-admin's template context into the
 # flask-security views.
@@ -179,42 +164,10 @@ def security_context_processor():
         h=admin_helpers,
     )
 
-def build_sample_db():
-    """
-    Populate a small db with some example entries.
-    """
-
-    import string
-    import random
-
-    #db.drop_all()
-    db.create_all()
-
-    with app.app_context():
-        user_role = Role(name='user')
-        super_user_role = Role(name='superuser')
-        db.session.add(user_role)
-        db.session.add(super_user_role)
-        db.session.commit()
-
-        test_user = user_datastore.create_user(
-            first_name='Admin',
-            email='admin',
-            password=encrypt_password('admin'),
-            roles=[user_role, super_user_role]
-        )
-
-        db.session.commit()
-    return
 
 if __name__ == '__main__':
 
-    # Build a sample sqlite db on the fly, if one does not exist yet.
-    app_dir = os.path.realpath(os.path.dirname(__file__))
-    database_path = os.path.join(app_dir, app.config['DATABASE_FILE'])
-    #uncomment to build.... 
-    #if not os.path.exists(database_path):
-     #  build_sample_db()
+    # run user's sql manually to create user/role tables...
 
     # Start app
     app.run(host='0.0.0.0', debug=True)
