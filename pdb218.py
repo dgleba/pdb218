@@ -109,6 +109,10 @@ security = Security(app, user_datastore)
 
 class SecuredView(sqla.ModelView):
 
+    column_display_pk = True
+    can_view_details = True
+    can_export = True
+    
     def is_accessible(self):
         if not current_user.is_active or not current_user.is_authenticated:
             return False
@@ -160,8 +164,8 @@ class prodtrack_admview(SecuredView):
     can_export = True
     #column_exclude_list = [ 'comments' ]
     column_list = [ 'Id','pi_id','machine','part_number','part_timestamp','qty','perpetual_counter','downtime','cycletime','statuscode','autotime','last_time_diff', 'tmstamp' ]
-    column_searchable_list = ['machine', 'part_number', ]
-    column_filters = ['machine', 'cycletime', 'part_number',]
+    column_searchable_list = ['Id','pi_id','machine','part_number','part_timestamp','qty','perpetual_counter','downtime','cycletime','statuscode','autotime','last_time_diff',]
+    column_filters = ['Id','pi_id','machine','part_number','part_timestamp','qty','perpetual_counter','downtime','cycletime','statuscode','autotime','last_time_diff' ]
 
 
 class vw_open_admview(SecuredView):
