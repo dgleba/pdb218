@@ -1,4 +1,4 @@
-# prodigy trackberry wee little flasky app..
+# prodigy trakberry wee little flasky app..
 # orginally from flask-admin auth example.
 
 from flask import Flask, url_for, redirect, render_template, request, abort
@@ -13,9 +13,10 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy import create_engine
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import column_property
+from sqlalchemy.ext.hybrid import hybrid_property
 import flask_admin
 import flask_admin as admin
-import os
+import os, time
 
 from flask_security import Security, SQLAlchemyUserDatastore, \
     UserMixin, RoleMixin, login_required, current_user
@@ -34,14 +35,23 @@ db = SQLAlchemy(app)
 # Define models - reflect
 
 # reflect models from the database...
-
 connection = db.engine.connect()
 db.metadata.reflect(db.engine, only=['tkb_prodtrak', 'pr_who_list'])
-Base = automap_base(metadata=db.metadata)
-Base.prepare()
 
-Prodtrak = Base.classes.tkb_prodtrak
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+#reflect table...   
+class tkb_prodtrak(db.Model):
+    __table__ = db.Table(
+        'tkb_prodtrak', db.metadata,
+        #db.Column('id', db.Integer, primary_key=True),
+        autoload=True,
+        autoload_with=db.engine
+    )
+     
+    @hybrid_property
+    def tmstamp(self):
+        return time.ctime(int(self.part_timestamp))
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 				
@@ -138,6 +148,7 @@ class prodtrack_admview(SecuredView):
     column_default_sort = ('part_timestamp', True)
     can_export = True
     #column_exclude_list = [ 'comments' ]
+    column_list = [ 'machine', 'cycletime', 'part_number', 'tmstamp' ]
     column_searchable_list = ['machine', 'part_number',  ]
     column_filters = ['machine', 'cycletime', 'part_number',]
 
@@ -146,7 +157,7 @@ class prodtrack_admview(SecuredView):
 
 # Add model views
 
-admin.add_view(prodtrack_admview(Prodtrak, db.session))
+admin.add_view(prodtrack_admview(tkb_prodtrak, db.session))
 
 admin.add_view(SecuredView(Role, db.session))
 admin.add_view(SecuredView(User, db.session))

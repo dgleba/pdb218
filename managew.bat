@@ -1,7 +1,7 @@
 :Prepare date and temp folders - http://serverfault.com/questions/147515/need-leading-zero-for-batch-script-using-time-variable
 set timea=%TIME: =0%
 set ymd=%date:~12,2%%date:~4,2%%date:~7,2%&set dhms=%date:~12,2%%date:~4,2%%date:~7,2%_%timea:~0,2%%timea:~3,2%%timea:~6,2%
-c: & md c:\temp\log\"%dhms%"  & cd c:\temp\log\"%dhms%"
+:c: & md c:\temp\log\"%dhms%"  & cd c:\temp\log\"%dhms%"
 
 :main
 rem ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ std2
@@ -9,8 +9,8 @@ rem ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ std2
 set wpy=c:\p2\python27\python
 set wpip=c:\p2\Python27\Scripts\pip
 
-cd C:\p2\xampp\htdocs\python\pdb218
-c: 
+:cd C:\p2\xampp\htdocs\python\pdb218
+ 
 
 :%wpip% install -r requirements.txt
 
@@ -39,3 +39,4 @@ this is offline
 : offline items ---------------------------------------------------------
 :end
 :pause
+pause
