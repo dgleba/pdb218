@@ -1,0 +1,787 @@
+# coding: utf-8
+from sqlalchemy import BigInteger, Column, Date, DateTime, Enum, ForeignKey, Integer, Numeric, String, Table, Text, text
+from sqlalchemy.orm import relationship
+from sqlalchemy.ext.declarative import declarative_base
+
+
+Base = declarative_base()
+metadata = Base.metadata
+
+
+class AboutThisApp(Base):
+    __tablename__ = 'about_this_app'
+
+    sort_order = Column(Integer, nullable=False)
+    about_fld = Column(Text)
+    createdtime = Column(DateTime, server_default=text("CURRENT_TIMESTAMP"))
+    updatedtime = Column(DateTime)
+    id = Column(Integer, primary_key=True)
+
+
+class AboutThisAppHistory(Base):
+    __tablename__ = 'about_this_app__history'
+
+    history__id = Column(Integer, primary_key=True)
+    history__language = Column(String(2))
+    history__comments = Column(Text)
+    history__user = Column(String(32))
+    history__state = Column(Integer, server_default=text("'0'"))
+    history__modified = Column(DateTime, index=True)
+    sort_order = Column(Integer)
+    about_fld = Column(Text)
+    createdtime = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
+    updatedtime = Column(DateTime)
+    id = Column(Integer, index=True)
+
+
+class Dashboard(Base):
+    __tablename__ = 'dashboard'
+
+    dashboard_id = Column(Integer, primary_key=True)
+
+
+class DatafaceFailedLogin(Base):
+    __tablename__ = 'dataface__failed_logins'
+
+    attempt_id = Column(Integer, primary_key=True)
+    ip_address = Column(String(32), nullable=False)
+    username = Column(String(32), nullable=False)
+    time_of_attempt = Column(Integer, nullable=False)
+
+
+class DatafaceModule(Base):
+    __tablename__ = 'dataface__modules'
+
+    module_name = Column(String(255), primary_key=True)
+    module_version = Column(Integer)
+
+
+class DatafaceMtime(Base):
+    __tablename__ = 'dataface__mtimes'
+
+    name = Column(String(255), primary_key=True)
+    mtime = Column(Integer)
+
+
+class DatafacePreference(Base):
+    __tablename__ = 'dataface__preferences'
+
+    pref_id = Column(Integer, primary_key=True)
+    username = Column(String(64), nullable=False, index=True)
+    table = Column(String(128), nullable=False, index=True)
+    record_id = Column(String(255), nullable=False, index=True)
+    key = Column(String(128), nullable=False)
+    value = Column(String(255), nullable=False)
+
+
+class DatafaceRecordMtime(Base):
+    __tablename__ = 'dataface__record_mtimes'
+
+    recordhash = Column(String(32), primary_key=True)
+    recordid = Column(String(255), nullable=False)
+    mtime = Column(Integer, nullable=False)
+
+
+t_dataface__version = Table(
+    'dataface__version', metadata,
+    Column('version', Integer, nullable=False, server_default=text("'0'"))
+)
+
+
+t_dataface__view_08325ff712befed0cd30757ee0213356 = Table(
+    'dataface__view_08325ff712befed0cd30757ee0213356', metadata,
+    Column('machinenum', String(111)),
+    Column('problem', String(554)),
+    Column('called4helptime', DateTime),
+    Column('priority', Enum(u'A', u'B', u'C', u'D', u'E'), server_default=text("'C'")),
+    Column('whoisonit', String(554)),
+    Column('down', Enum(u'Yes_Down', u'No', u'Planned_Yes', u'Yes_Down_SendEmail', u'No_SendEmail')),
+    Column('closed', Integer),
+    Column('completedtime', DateTime),
+    Column('remedy', String(554)),
+    Column('createdtime', DateTime),
+    Column('updatedtime', DateTime),
+    Column('idnumber', Integer, server_default=text("'0'")),
+    Column('record_ref', String(61)),
+    Column('down_length', Numeric(14, 4))
+)
+
+
+t_dataface__view_640ed7fd114b47369e6b64c18dad38be = Table(
+    'dataface__view_640ed7fd114b47369e6b64c18dad38be', metadata,
+    Column('Id', Integer, server_default=text("'0'")),
+    Column('pi_id', Integer),
+    Column('machine', String(30)),
+    Column('part_number', String(20)),
+    Column('part_timestamp', Integer),
+    Column('qty', Integer),
+    Column('perpetual_counter', Integer),
+    Column('downtime', Integer),
+    Column('cycletime', Integer),
+    Column('statuscode', String(25)),
+    Column('autotime', Integer),
+    Column('last_time_diff', Integer),
+    Column('from_unixtime(part_timestamp)', DateTime),
+    Column('ctime', BigInteger),
+    Column('dtime', BigInteger)
+)
+
+
+t_dataface__view_7a9c3c5ceb0be2b39e05cd81813bd14c = Table(
+    'dataface__view_7a9c3c5ceb0be2b39e05cd81813bd14c', metadata,
+    Column('machinenum', String(111)),
+    Column('problem', String(554)),
+    Column('called4helptime', DateTime),
+    Column('priority', Enum(u'A', u'B', u'C', u'D', u'E'), server_default=text("'C'")),
+    Column('whoisonit', String(554)),
+    Column('down', Enum(u'Yes_Down', u'No', u'Planned_Yes', u'Yes_Down_SendEmail', u'No_SendEmail')),
+    Column('closed', Integer),
+    Column('completedtime', DateTime),
+    Column('remedy', String(554)),
+    Column('createdtime', DateTime),
+    Column('updatedtime', DateTime),
+    Column('idnumber', Integer, server_default=text("'0'")),
+    Column('record_ref', String(91))
+)
+
+
+t_dataface__view_8be8789c15bcd162b93ee17b471f25c8 = Table(
+    'dataface__view_8be8789c15bcd162b93ee17b471f25c8', metadata,
+    Column('Id', Integer, server_default=text("'0'")),
+    Column('pi_id', Integer),
+    Column('machine', String(30)),
+    Column('part_number', String(20)),
+    Column('part_timestamp', Integer),
+    Column('qty', Integer),
+    Column('perpetual_counter', Integer),
+    Column('downtime', Integer),
+    Column('cycletime', Integer),
+    Column('statuscode', String(25)),
+    Column('autotime', Integer),
+    Column('last_time_diff', Integer),
+    Column('from_unixtime(part_timestamp)', DateTime),
+    Column('last_time_delta', BigInteger),
+    Column('ctime', BigInteger),
+    Column('dtime', BigInteger)
+)
+
+
+t_dataface__view_9436c4c078c0d281b489ad38c1834672 = Table(
+    'dataface__view_9436c4c078c0d281b489ad38c1834672', metadata,
+    Column('Id', Integer, server_default=text("'0'")),
+    Column('pi_id', Integer),
+    Column('machine', String(30)),
+    Column('part_number', String(20)),
+    Column('part_timestamp', Integer),
+    Column('qty', Integer),
+    Column('perpetual_counter', Integer),
+    Column('downtime', Integer),
+    Column('cycletime', Integer),
+    Column('statuscode', String(25)),
+    Column('autotime', Integer),
+    Column('last_time_diff', Integer),
+    Column('tstamp', DateTime),
+    Column('last_time_delta', BigInteger),
+    Column('ctime', BigInteger),
+    Column('dtime', BigInteger)
+)
+
+
+t_dataface__view_cf3c6d84ddbd922424756629fcd05f95 = Table(
+    'dataface__view_cf3c6d84ddbd922424756629fcd05f95', metadata,
+    Column('prdate', Date),
+    Column('prshift', Enum(u'Days: 7AM-11AM', u'Days: 11AM-3PM', u'Afternoons: 3PM-7PM', u'Afternoons: 7PM-11PM', u'Nights: 11PM-3AM', u'Nights: 3AM-7AM')),
+    Column('cell_group', String(99)),
+    Column('reportedby', String(99)),
+    Column('miscellaneous', Text),
+    Column('createdtime', DateTime, server_default=text("'0000-00-00 00:00:00'")),
+    Column('updatedtime', DateTime),
+    Column('phid', Integer, server_default=text("'0'"))
+)
+
+
+t_dataface__view_fac5ff34c7a92eefa5688e62b24b7bb4 = Table(
+    'dataface__view_fac5ff34c7a92eefa5688e62b24b7bb4', metadata,
+    Column('prdate', Date),
+    Column('prshift', Enum(u'Days: 7AM-11AM', u'Days: 11AM-3PM', u'Afternoons: 3PM-7PM', u'Afternoons: 7PM-11PM', u'Nights: 11PM-3AM', u'Nights: 3AM-7AM')),
+    Column('cell_group', String(99)),
+    Column('reportedby', String(99)),
+    Column('miscellaneous', Text),
+    Column('createdtime', DateTime, server_default=text("'0000-00-00 00:00:00'")),
+    Column('updatedtime', DateTime),
+    Column('phid', Integer, server_default=text("'0'"))
+)
+
+
+class PrCellGroup(Base):
+    __tablename__ = 'pr_cell_group'
+
+    cell_group = Column(String(99), primary_key=True)
+    comment = Column(String(233))
+    createdtime = Column(DateTime, server_default=text("CURRENT_TIMESTAMP"))
+    updatedtime = Column(DateTime)
+
+
+class PrCellGroupHistory(Base):
+    __tablename__ = 'pr_cell_group__history'
+
+    history__id = Column(Integer, primary_key=True)
+    history__language = Column(String(2))
+    history__comments = Column(Text)
+    history__user = Column(String(32))
+    history__state = Column(Integer, server_default=text("'0'"))
+    history__modified = Column(DateTime, index=True)
+    cell_group = Column(String(99), index=True)
+    comment = Column(String(233))
+    createdtime = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
+    updatedtime = Column(DateTime)
+
+
+class PrCellList(Base):
+    __tablename__ = 'pr_cell_list'
+
+    cell_list = Column(String(99), primary_key=True)
+    comment = Column(String(233))
+    createdtime = Column(DateTime, server_default=text("CURRENT_TIMESTAMP"))
+    updatedtime = Column(DateTime)
+
+
+class PrCellListHistory(Base):
+    __tablename__ = 'pr_cell_list__history'
+
+    history__id = Column(Integer, primary_key=True)
+    history__language = Column(String(2))
+    history__comments = Column(Text)
+    history__user = Column(String(32))
+    history__state = Column(Integer, server_default=text("'0'"))
+    history__modified = Column(DateTime, index=True)
+    cell_list = Column(String(99), index=True)
+    comment = Column(String(233))
+    createdtime = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
+    updatedtime = Column(DateTime)
+
+
+class PrDowntime1(Base):
+    __tablename__ = 'pr_downtime1'
+
+    machinenum = Column(String(111), nullable=False)
+    problem = Column(String(554))
+    called4helptime = Column(DateTime, nullable=False)
+    priority = Column(Enum(u'A', u'B', u'C', u'D', u'E'), nullable=False, server_default=text("'C'"))
+    whoisonit = Column(String(554))
+    down = Column(Enum(u'Yes_Down', u'No', u'Planned_Yes', u'Yes_Down_SendEmail', u'No_SendEmail'), nullable=False)
+    closed = Column(Integer)
+    completedtime = Column(DateTime)
+    remedy = Column(String(554))
+    createdtime = Column(DateTime, server_default=text("CURRENT_TIMESTAMP"))
+    updatedtime = Column(DateTime)
+    idnumber = Column(Integer, primary_key=True)
+
+
+class PrDowntime1History(Base):
+    __tablename__ = 'pr_downtime1__history'
+
+    history__id = Column(Integer, primary_key=True)
+    history__language = Column(String(2))
+    history__comments = Column(Text)
+    history__user = Column(String(32))
+    history__state = Column(Integer, server_default=text("'0'"))
+    history__modified = Column(DateTime, index=True)
+    machinenum = Column(String(111))
+    called4helptime = Column(DateTime)
+    down = Column(Enum(u'Yes', u'No', u'Planned_Yes'))
+    whoisonit = Column(String(554))
+    problem = Column(String(554))
+    closed = Column(Integer)
+    completedtime = Column(DateTime)
+    remedy = Column(String(554))
+    createdtime = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
+    updatedtime = Column(DateTime)
+    idnumber = Column(Integer, index=True)
+    priority = Column(Enum(u'A', u'b', u'c'))
+
+
+class PrMachine(Base):
+    __tablename__ = 'pr_machine'
+
+    machine_num_list = Column(String(15), primary_key=True, server_default=text("''"))
+    machine_description = Column(String(99), nullable=False, server_default=text("''"))
+    Description = Column(String(36))
+    DT_Rate = Column(Integer)
+    Serial_Number = Column(String(49))
+    Report_DT = Column(String(4))
+    Model_ID = Column(String(32))
+    Active = Column(String(4))
+    Manufacturer = Column(String(31))
+    Cell = Column(String(18))
+    Line = Column(String(21))
+    Department = Column(String(13))
+    Location = Column(String(13))
+    Id_cmms = Column(Integer)
+    createdtime = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
+    updatedtime = Column(DateTime)
+
+
+class PrMachineHistory(Base):
+    __tablename__ = 'pr_machine__history'
+
+    history__id = Column(Integer, primary_key=True)
+    history__language = Column(String(2))
+    history__comments = Column(Text)
+    history__user = Column(String(32))
+    history__state = Column(Integer, server_default=text("'0'"))
+    history__modified = Column(DateTime, index=True)
+    machine_num_list = Column(String(15), index=True)
+    machine_description = Column(String(99))
+    Description = Column(String(36))
+    DT_Rate = Column(Integer)
+    Serial_Number = Column(String(49))
+    Report_DT = Column(String(4))
+    Model_ID = Column(String(32))
+    Active = Column(String(4))
+    Manufacturer = Column(String(31))
+    Cell = Column(String(18))
+    Line = Column(String(21))
+    Department = Column(String(13))
+    Location = Column(String(13))
+    Id_cmms = Column(Integer)
+    createdtime = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
+    updatedtime = Column(DateTime)
+
+
+class PrPart(Base):
+    __tablename__ = 'pr_parts'
+
+    partlist = Column(String(99), primary_key=True)
+    createdtime = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
+    updatedtime = Column(DateTime, nullable=False)
+    comment = Column(String(99))
+
+
+class PrProduction(Base):
+    __tablename__ = 'pr_production'
+
+    cell = Column(String(99), nullable=False)
+    machine = Column(String(99), nullable=False)
+    part = Column(String(99), nullable=False)
+    actual_produced = Column(Integer, nullable=False, server_default=text("'0'"))
+    scrap_qty = Column(Integer, nullable=False, server_default=text("'0'"))
+    down_time_mins = Column(Integer, nullable=False, server_default=text("'0'"))
+    comments = Column(String(500), nullable=False)
+    createdtime = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
+    updatedtime = Column(DateTime)
+    pid = Column(Integer, primary_key=True)
+    phfkid = Column(Integer, nullable=False)
+    num_operators = Column(Integer, nullable=False)
+
+
+class PrProductionHistory(Base):
+    __tablename__ = 'pr_production__history'
+
+    history__id = Column(Integer, primary_key=True)
+    history__language = Column(String(2))
+    history__comments = Column(Text)
+    history__user = Column(String(32))
+    history__state = Column(Integer, server_default=text("'0'"))
+    history__modified = Column(DateTime, index=True)
+    cell = Column(String(99))
+    machine = Column(String(99))
+    part = Column(String(99))
+    actual_produced = Column(Integer)
+    scrap_qty = Column(Integer)
+    down_time_mins = Column(Integer)
+    comments = Column(String(500))
+    createdtime = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
+    updatedtime = Column(DateTime)
+    pid = Column(Integer, index=True)
+    phfkid = Column(Integer)
+    num_operators = Column(Integer)
+
+
+class PrProductionheader(Base):
+    __tablename__ = 'pr_productionheader'
+
+    prdate = Column(Date, nullable=False)
+    prshift = Column(Enum(u'Days: 7AM-11AM', u'Days: 11AM-3PM', u'Afternoons: 3PM-7PM', u'Afternoons: 7PM-11PM', u'Nights: 11PM-3AM', u'Nights: 3AM-7AM'), nullable=False)
+    cell_group = Column(String(99), nullable=False)
+    reportedby = Column(String(99))
+    miscellaneous = Column(Text, nullable=False)
+    createdtime = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
+    updatedtime = Column(DateTime)
+    phid = Column(Integer, primary_key=True)
+
+
+class PrProductionheaderHistory(Base):
+    __tablename__ = 'pr_productionheader__history'
+
+    history__id = Column(Integer, primary_key=True)
+    history__language = Column(String(2))
+    history__comments = Column(Text)
+    history__user = Column(String(32))
+    history__state = Column(Integer, server_default=text("'0'"))
+    history__modified = Column(DateTime, index=True)
+    prdate = Column(Date)
+    prshift = Column(Enum(u'Days: 7AM-11AM', u'Days: 11AM-3PM', u'Afternoons: 3PM-7PM', u'Afternoons: 7PM-11PM', u'Nights: 11PM-3AM', u'Nights: 3AM-7AM'))
+    cell_group = Column(String(99))
+    reportedby = Column(String(99))
+    createdtime = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
+    updatedtime = Column(DateTime)
+    miscellaneous = Column(Text)
+    phid = Column(Integer, index=True)
+
+
+class PrWhoList(Base):
+    __tablename__ = 'pr_who_list'
+
+    who_list = Column(String(99), primary_key=True)
+    comment = Column(String(233))
+    createdtime = Column(DateTime, server_default=text("CURRENT_TIMESTAMP"))
+    updatedtime = Column(DateTime)
+
+
+class PrWhoListHistory(Base):
+    __tablename__ = 'pr_who_list__history'
+
+    history__id = Column(Integer, primary_key=True)
+    history__language = Column(String(2))
+    history__comments = Column(Text)
+    history__user = Column(String(32))
+    history__state = Column(Integer, server_default=text("'0'"))
+    history__modified = Column(DateTime, index=True)
+    who_list = Column(String(99), index=True)
+    comment = Column(String(233))
+    createdtime = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
+    updatedtime = Column(DateTime)
+
+
+class Role(Base):
+    __tablename__ = 'role'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(80), unique=True)
+    description = Column(String(255))
+
+    users = relationship(u'User', secondary='roles_users')
+
+
+t_roles_users = Table(
+    'roles_users', metadata,
+    Column('user_id', ForeignKey(u'user.id'), index=True),
+    Column('role_id', ForeignKey(u'role.id'), index=True)
+)
+
+
+class Testtest(Base):
+    __tablename__ = 'testtest'
+
+    Id = Column(Integer, primary_key=True)
+    machine = Column(String(30))
+    time = Column(Integer)
+    qty = Column(Integer)
+    pcount = Column(Integer)
+    downtime = Column(Integer)
+    cycletime = Column(Integer)
+    status = Column(String(25))
+
+
+class TkbProdtrak(Base):
+    __tablename__ = 'tkb_prodtrak'
+
+    Id = Column(Integer, primary_key=True)
+    pi_id = Column(Integer)
+    machine = Column(String(30))
+    part_number = Column(String(20), nullable=False)
+    part_timestamp = Column(Integer)
+    qty = Column(Integer)
+    perpetual_counter = Column(Integer)
+    downtime = Column(Integer)
+    cycletime = Column(Integer)
+    statuscode = Column(String(25))
+    autotime = Column(Integer, nullable=False)
+    last_time_diff = Column(Integer, nullable=False)
+
+
+class TkbTest(Base):
+    __tablename__ = 'tkb_test'
+
+    Id = Column(Integer, primary_key=True)
+    message = Column(String(30))
+    stime = Column(Integer)
+    ftime = Column(Integer)
+    ctime = Column(Integer)
+    dtime = Column(Integer, nullable=False)
+
+
+class User(Base):
+    __tablename__ = 'user'
+
+    id = Column(Integer, primary_key=True)
+    first_name = Column(String(255))
+    last_name = Column(String(255))
+    email = Column(String(255), unique=True)
+    password = Column(String(255))
+    active = Column(Integer)
+    confirmed_at = Column(DateTime)
+
+
+class User(Base):
+    __tablename__ = 'users'
+
+    username = Column(String(32), primary_key=True)
+    password = Column(String(244), nullable=False)
+    Role = Column(Enum(u'READ ONLY', u'NO ACCESS', u'EDIT', u'DELETE', u'OWNER', u'USER', u'ADMIN', u'REGISTER', u'ADDER', u'EDITB1'), server_default=text("'ADDER'"))
+    first_name = Column(String(233))
+    last_name = Column(String(233))
+    address = Column(String(244))
+    phone_num = Column(String(211))
+    email = Column(String(234), nullable=False)
+    comment_fld1 = Column(Text)
+    createdtime = Column(DateTime, server_default=text("CURRENT_TIMESTAMP"))
+    updatedtime = Column(DateTime)
+
+
+class UsersHistory(Base):
+    __tablename__ = 'users__history'
+
+    history__id = Column(Integer, primary_key=True)
+    history__language = Column(String(2))
+    history__comments = Column(Text)
+    history__user = Column(String(32))
+    history__state = Column(Integer, server_default=text("'0'"))
+    history__modified = Column(DateTime, index=True)
+    username = Column(String(32), index=True)
+    password = Column(String(244))
+    Role = Column(Enum(u'READ ONLY', u'NO ACCESS', u'EDIT', u'DELETE', u'OWNER', u'USER', u'ADMIN', u'REGISTER', u'ADDER'))
+    first_name = Column(String(233))
+    last_name = Column(String(233))
+    address = Column(String(244))
+    phone_num = Column(String(211))
+    email = Column(String(234))
+    comment_fld1 = Column(Text)
+    createdtime = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
+    updatedtime = Column(DateTime)
+
+
+class Vacation(Base):
+    __tablename__ = 'vacation'
+
+    Id = Column(Integer, nullable=False)
+    employee = Column(String(25), nullable=False)
+    shift = Column(String(30), nullable=False)
+    start = Column(Date, nullable=False)
+    end = Column(Date, nullable=False)
+    day_start = Column(String(20), nullable=False)
+    day_end = Column(String(20), nullable=False)
+    id_number = Column(Integer, primary_key=True)
+
+
+t_vw_all_prdowntime1 = Table(
+    'vw_all_prdowntime1', metadata,
+    Column('machinenum', String(111)),
+    Column('problem', String(554)),
+    Column('called4helptime', DateTime),
+    Column('whoisonit', String(554)),
+    Column('down', Enum(u'Yes_Down', u'No', u'Planned_Yes', u'Yes_Down_SendEmail', u'No_SendEmail')),
+    Column('closed', Integer),
+    Column('completedtime', DateTime),
+    Column('remedy', String(554)),
+    Column('createdtime', DateTime),
+    Column('updatedtime', DateTime),
+    Column('idnumber', Integer, server_default=text("'0'"))
+)
+
+
+class VwAllPrdowntime1History(Base):
+    __tablename__ = 'vw_all_prdowntime1__history'
+
+    history__id = Column(Integer, primary_key=True)
+    history__language = Column(String(2))
+    history__comments = Column(Text)
+    history__user = Column(String(32))
+    history__state = Column(Integer, server_default=text("'0'"))
+    history__modified = Column(DateTime, index=True)
+    machinenum = Column(String(111))
+    called4helptime = Column(DateTime)
+    down = Column(Enum(u'Yes_Down', u'No', u'Planned_Yes', u'Yes_Down_SendEmail', u'No_SendEmail'))
+    whoisonit = Column(String(554))
+    completedtime = Column(DateTime)
+    problem = Column(String(554))
+    closed = Column(Integer)
+    remedy = Column(String(554))
+    createdtime = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
+    updatedtime = Column(DateTime)
+    idnumber = Column(Integer, index=True)
+
+
+t_vw_edit2_prdowntime1 = Table(
+    'vw_edit2_prdowntime1', metadata,
+    Column('machinenum', String(111)),
+    Column('problem', String(554)),
+    Column('called4helptime', DateTime),
+    Column('whoisonit', String(554)),
+    Column('down', Enum(u'Yes_Down', u'No', u'Planned_Yes', u'Yes_Down_SendEmail', u'No_SendEmail')),
+    Column('closed', Integer),
+    Column('completedtime', DateTime),
+    Column('remedy', String(554)),
+    Column('createdtime', DateTime),
+    Column('updatedtime', DateTime),
+    Column('idnumber', Integer, server_default=text("'0'")),
+    Column('openitem', Integer, server_default=text("'0'"))
+)
+
+
+t_vw_edit_prdowntime1 = Table(
+    'vw_edit_prdowntime1', metadata,
+    Column('machinenum', String(111)),
+    Column('problem', String(554)),
+    Column('called4helptime', DateTime),
+    Column('whoisonit', String(554)),
+    Column('down', Enum(u'Yes_Down', u'No', u'Planned_Yes', u'Yes_Down_SendEmail', u'No_SendEmail')),
+    Column('closed', Integer),
+    Column('completedtime', DateTime),
+    Column('remedy', String(554)),
+    Column('createdtime', DateTime),
+    Column('updatedtime', DateTime),
+    Column('idnumber', Integer, server_default=text("'0'"))
+)
+
+
+class VwEditPrdowntime1History(Base):
+    __tablename__ = 'vw_edit_prdowntime1__history'
+
+    history__id = Column(Integer, primary_key=True)
+    history__language = Column(String(2))
+    history__comments = Column(Text)
+    history__user = Column(String(32))
+    history__state = Column(Integer, server_default=text("'0'"))
+    history__modified = Column(DateTime, index=True)
+    machinenum = Column(String(111))
+    called4helptime = Column(DateTime)
+    down = Column(Enum(u'Yes', u'No', u'Planned_Yes'))
+    whoisonit = Column(String(554))
+    completedtime = Column(DateTime)
+    problem = Column(String(554))
+    closed = Column(Integer)
+    remedy = Column(String(554))
+    createdtime = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
+    updatedtime = Column(DateTime)
+    idnumber = Column(Integer, index=True)
+
+
+t_vw_open = Table(
+    'vw_open', metadata,
+    Column('machinenum', String(111)),
+    Column('problem', String(554)),
+    Column('called4helptime', DateTime),
+    Column('priority', Enum(u'A', u'B', u'C', u'D', u'E'), server_default=text("'C'")),
+    Column('whoisonit', String(554)),
+    Column('down', Enum(u'Yes_Down', u'No', u'Planned_Yes', u'Yes_Down_SendEmail', u'No_SendEmail')),
+    Column('closed', Integer),
+    Column('completedtime', DateTime),
+    Column('remedy', String(554)),
+    Column('createdtime', DateTime),
+    Column('updatedtime', DateTime),
+    Column('idnumber', Integer, server_default=text("'0'"))
+)
+
+
+class VwOpenHistory(Base):
+    __tablename__ = 'vw_open__history'
+
+    history__id = Column(Integer, primary_key=True)
+    history__language = Column(String(2))
+    history__comments = Column(Text)
+    history__user = Column(String(32))
+    history__state = Column(Integer, server_default=text("'0'"))
+    history__modified = Column(DateTime, index=True)
+    machinenum = Column(String(111))
+    called4helptime = Column(DateTime)
+    down = Column(Enum(u'Yes_Down', u'No', u'Planned_Yes', u'Yes_Down_SendEmail', u'No_SendEmail'))
+    whoisonit = Column(String(554))
+    problem = Column(String(554))
+    closed = Column(Integer)
+    completedtime = Column(DateTime)
+    remedy = Column(String(554))
+    createdtime = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
+    updatedtime = Column(DateTime)
+    idnumber = Column(Integer, index=True)
+    priority = Column(Enum(u'A', u'B', u'C', u'D', u'E'))
+
+
+t_vw_pr_downtime1_qry1 = Table(
+    'vw_pr_downtime1_qry1', metadata,
+    Column('machinenum', String(111)),
+    Column('problem', String(554)),
+    Column('called4helptime', DateTime),
+    Column('priority', Enum(u'A', u'B', u'C', u'D', u'E'), server_default=text("'C'")),
+    Column('whoisonit', String(554)),
+    Column('down', Enum(u'Yes_Down', u'No', u'Planned_Yes', u'Yes_Down_SendEmail', u'No_SendEmail')),
+    Column('closed', Integer),
+    Column('completedtime', DateTime),
+    Column('remedy', String(554)),
+    Column('createdtime', DateTime),
+    Column('updatedtime', DateTime),
+    Column('idnumber', Integer, server_default=text("'0'"))
+)
+
+
+t_vw_pr_productionhdr_insp = Table(
+    'vw_pr_productionhdr_insp', metadata,
+    Column('prdate', Date),
+    Column('prshift', Enum(u'Days: 7AM-11AM', u'Days: 11AM-3PM', u'Afternoons: 3PM-7PM', u'Afternoons: 7PM-11PM', u'Nights: 11PM-3AM', u'Nights: 3AM-7AM')),
+    Column('cell_group', String(99)),
+    Column('reportedby', String(99)),
+    Column('miscellaneous', Text),
+    Column('createdtime', DateTime, server_default=text("'0000-00-00 00:00:00'")),
+    Column('updatedtime', DateTime),
+    Column('phid', Integer, server_default=text("'0'"))
+)
+
+
+class VwPrProductionhdrInspHistory(Base):
+    __tablename__ = 'vw_pr_productionhdr_insp__history'
+
+    history__id = Column(Integer, primary_key=True)
+    history__language = Column(String(2))
+    history__comments = Column(Text)
+    history__user = Column(String(32))
+    history__state = Column(Integer, server_default=text("'0'"))
+    history__modified = Column(DateTime, index=True)
+    prdate = Column(Date)
+    prshift = Column(Enum(u'Days: 7AM-11AM', u'Days: 11AM-3PM', u'Afternoons: 3PM-7PM', u'Afternoons: 7PM-11PM', u'Nights: 11PM-3AM', u'Nights: 3AM-7AM'))
+    cell_group = Column(String(99))
+    reportedby = Column(String(99))
+    createdtime = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
+    updatedtime = Column(DateTime)
+    miscellaneous = Column(Text)
+    phid = Column(Integer, index=True)
+
+
+class ZtkbProdtrak(Base):
+    __tablename__ = 'ztkb_prodtrak'
+
+    Id = Column(Integer, primary_key=True)
+    pi_id = Column(Integer)
+    machine = Column(String(30))
+    part_number = Column(String(20), nullable=False)
+    time = Column(Integer)
+    qty = Column(Integer)
+    pcount = Column(Integer)
+    downtime = Column(Integer)
+    cycletime = Column(Integer)
+    status = Column(String(25))
+
+
+class ZtkbProdtrakWdup(Base):
+    __tablename__ = 'ztkb_prodtrak_wdups'
+
+    Id = Column(Integer, primary_key=True)
+    pi_id = Column(Integer)
+    machine = Column(String(30))
+    part_number = Column(String(20), nullable=False)
+    time = Column(Integer)
+    qty = Column(Integer)
+    pcount = Column(Integer)
+    downtime = Column(Integer)
+    cycletime = Column(Integer)
+    status = Column(String(25))

@@ -1,0 +1,13 @@
+
+copy and paste these commands...
+ 
+ 
+ 
+ cd /var/www/html/python/pdb218
+
+#  sqlacodegen mysql://dg417:dg@127.0.0.1/prodrptdb > modelsgen.txt
+
+#  pip  install -r requirements.txt
+
+python pdb218.py
+

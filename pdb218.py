@@ -53,6 +53,18 @@ class tkb_prodtrak(db.Model):
     def tmstamp(self):
         return time.ctime(int(self.part_timestamp))
 
+# reflect view...
+class vw_open(db.Model):
+    __table__ = db.Table(
+        'vw_open', db.metadata,
+        db.Column('idnumber', db.Integer, primary_key=True),
+        #...other column defs...
+        autoload=True,
+        autoload_with=db.engine
+    )
+        
+        
+        
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 				
 		
@@ -136,11 +148,10 @@ admin = flask_admin.Admin(
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# customize trakberry
+# customize prodigy/trakberry
 
 
 class prodtrack_admview(SecuredView):
-
     column_display_pk = True
     can_delete = False
     page_size = 30
@@ -148,16 +159,24 @@ class prodtrack_admview(SecuredView):
     column_default_sort = ('part_timestamp', True)
     can_export = True
     #column_exclude_list = [ 'comments' ]
-    column_list = [ 'machine', 'cycletime', 'part_number', 'tmstamp' ]
-    column_searchable_list = ['machine', 'part_number',  ]
+    column_list = [ 'Id','pi_id','machine','part_number','part_timestamp','qty','perpetual_counter','downtime','cycletime','statuscode','autotime','last_time_diff', 'tmstamp' ]
+    column_searchable_list = ['machine', 'part_number', ]
     column_filters = ['machine', 'cycletime', 'part_number',]
 
+
+class vw_open_admview(SecuredView):
+    column_display_pk = True
+    can_delete = False
+    page_size = 30
+
+    
     
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Add model views
 
 admin.add_view(prodtrack_admview(tkb_prodtrak, db.session))
+admin.add_view(vw_open_admview(vw_open, db.session))
 
 admin.add_view(SecuredView(Role, db.session))
 admin.add_view(SecuredView(User, db.session))

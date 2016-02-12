@@ -12,7 +12,13 @@ set wpip=c:\p2\Python27\Scripts\pip
 :cd C:\p2\xampp\htdocs\python\pdb218
  
 
+:  sqlacodegen mysql://dg417:x@127.0.0.1/prodrptdb > modelsgen.txt
+
+%wpy% txp-fl.py
+
 :%wpip% install -r requirements.txt
+
+
 
 set wpy=c:\p2\python27\python
 %wpy% pdb218.py
